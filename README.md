@@ -6,6 +6,7 @@ Each OU is represented as a Map with attributes.
 
 | Name | Description | Example |
 |------|-------------|---------|
+| arn | The ARN of the OU. | `arn:aws:organizations::111111111111:ou/o-zyxsjdkdu5/ou-1abc-abcdefg` |
 | id | The id of the OU. | `ou-1abc-abcdefg` |
 |id_path | The path to the OU from the Organization ID, to be used with the `aws:PrincipalOrgPaths` and `aws:ResourceOrgPaths` conditions. | `o-zyxsjdkdu5/r-1abc/ou-1abc-bzfjwfg8/ou-1abc-abcdefg/` |
 | name | The name of the OU. | `Level 2 OU` |
@@ -55,21 +56,6 @@ resource "aws_s3_bucket_policy" "allow_access_from_another_account" {
 | Name | Version |
 |------|---------|
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 2.43.0 |
-
-## Modules
-
-No modules.
-
-## Resources
-
-| Name | Type |
-|------|------|
-| [aws_organizations_organization.org](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/organizations_organization) | data source |
-| [aws_organizations_organizational_units.level1](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/organizations_organizational_units) | data source |
-| [aws_organizations_organizational_units.level2](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/organizations_organizational_units) | data source |
-| [aws_organizations_organizational_units.level3](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/organizations_organizational_units) | data source |
-| [aws_organizations_organizational_units.level4](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/organizations_organizational_units) | data source |
-| [aws_organizations_organizational_units.level5](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/organizations_organizational_units) | data source |
 
 ## Inputs
 
