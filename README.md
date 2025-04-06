@@ -2,16 +2,28 @@
 
 A Terraform module to expose AWS Organizations Organizational Units with their relative paths from the Organization root.
 
-Each OU is represented as a Map with attributes.
+OUs can be accessed as via a list or through indexed Maps, see <a name="Outputs"></a> [Outputs](#Outputs) for more information.
 
-| Name | Description | Example |
-|------|-------------|---------|
-| arn | The ARN of the OU. | `arn:aws:organizations::111111111111:ou/o-zyxsjdkdu5/ou-1abc-abcdefg` |
-| id | The id of the OU. | `ou-1abc-abcdefg` |
-|id_path | The path to the OU from the Organization ID, to be used with the `aws:PrincipalOrgPaths` and `aws:ResourceOrgPaths` conditions. | `o-zyxsjdkdu5/r-1abc/ou-1abc-bzfjwfg8/ou-1abc-abcdefg/` |
-| name | The name of the OU. | `Level 2 OU` |
-| name_path | The name of all OUs in the path to the OU, delimited by the input `name_path_delimiter`. | `Level 1 OU/Level 2 OU` |
-| parent_id | The id of the OU's direct parent. | `ou-1abc-bzfjwfg8` |
+Each OU is represented as a Map with attributes
+
+- `arn` - ARN of the OU.
+- `child_accounts` - List of AWS accounts that are direct children of the OU. Dependant upon the `include_child_accounts` variable.
+  - `arn` - ARN of the account.
+  - `email` - Email of the account.
+  - `id` - Identifier of the account.
+  - `name` - Name of the account.
+  - `status` - Status of the account.
+- `descendant_accounts` - List of AWS accounts that are direct children or descendants of the OU. Dependant upon the `include_descendant_accounts` variable.
+  - `arn` - ARN of the account.
+  - `email` - Email of the account.
+  - `id` - Identifier of the account.
+  - `name` - Name of the account.
+  - `status` - Status of the account.
+- `id` - ID of the OU.
+- `id_path` - Path to the OU from the Organization ID, to be used with the `aws:PrincipalOrgPaths` and `aws:ResourceOrgPaths` conditions.
+- `name` - Name of the OU.
+- `name_path` - Path to the OU using OU names, delimited by the `name_path_delimiter` variable.
+- `parent_id` - ID of the OU's direct parent.
 
 ## Usage
 
@@ -61,7 +73,10 @@ resource "aws_s3_bucket_policy" "allow_access_from_another_account" {
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_include_child_accounts"></a> [include\_child\_accounts](#input\_include\_child\_accounts) | Include direct child AWS accounts in the output, increases the number of API calls when enabled. | `bool` | `false` | no |
+| <a name="input_include_descendant_accounts"></a> [include\_descendant\_accounts](#input\_include\_descendant\_accounts) | Include descendant AWS accounts in the output, increases complexity when enabled. | `bool` | `false` | no |
 | <a name="input_name_path_delimiter"></a> [name\_path\_delimiter](#input\_name\_path\_delimiter) | Delimiter used to join names in the name\_path attribute of each OU. | `string` | `"/"` | no |
+
 
 ## Outputs
 
