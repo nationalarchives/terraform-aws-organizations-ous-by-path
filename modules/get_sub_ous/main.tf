@@ -1,6 +1,6 @@
 locals {
   parent_level_ou_map = { for ou in var.parent_level_ou_list : ou.id => ou }
-  is_level1           = length(var.parent_level_ou_list) == 1 && startswith(var.parent_level_ou_list[0].id, "r-")
+  is_level1           = length(var.parent_level_ou_list) == 1 && try(startswith(var.parent_level_ou_list[0].id, "r-"), false)
 }
 
 data "aws_organizations_organizational_units" "sub_ous" {

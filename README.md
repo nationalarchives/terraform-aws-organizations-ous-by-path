@@ -2,7 +2,7 @@
 
 A Terraform module to expose AWS Organizations Organizational Units with their relative paths from the Organization root.
 
-OUs can be accessed as via a list or through indexed Maps, see <a name="Outputs"></a> [Outputs](#Outputs) for more information.
+OUs can be accessed via a list or through indexed Maps, see <a name="Outputs"></a> [Outputs](#Outputs) for more information.
 
 Each OU is represented as a Map with attributes
 
