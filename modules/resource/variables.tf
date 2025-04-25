@@ -22,12 +22,15 @@ variable "name_path_delimiter" {
 }
 
 variable "organization_structure" {
-  description = "The structure of OUs to manage as a map of maps. If not provided, this module will function as a data source."
+  description = "The structure of OUs to manage as a map of maps."
   type        = any
-  default     = {}
 
   validation {
     condition     = !strcontains(jsonencode(var.organization_structure), var.name_path_delimiter)
     error_message = "OU names cannot contain the name_path_delimiter."
+  }
+  validation {
+    condition     = !strcontains(jsonencode(var.organization_structure), local.internal_name_path_delimiter)
+    error_message = "OU names cannot contain \"${local.internal_name_path_delimiter}\" as this is used within the module to separate levels."
   }
 }

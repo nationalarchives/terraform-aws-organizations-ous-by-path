@@ -1,10 +1,10 @@
-# AWS Organizational Units by path Terraform module
+# AWS Organizational Units by path - Resource sub-module
 
-A Terraform module to **create** and/or **expose** AWS Organizations Organizational Units with their relative paths from the Organization root.
+A Terraform module to **create** and **expose** managed AWS Organizations Organizational Units with their relative paths from the Organization root.
 
-The organization structure can be defined as a map, then accessed via a list or through indexed maps. If no structure is defined this module will work as a data source with the same outputs. See <a name="Outputs"></a> [Outputs](#Outputs) for more information.
+The organization structure can be defined as a map, then accessed via a list or through indexed maps, see <a name="Outputs"></a> [Outputs](#Outputs) for more information.
 
-Each OU is represented as a Map with attributes
+Each OU is represented as a map with attributes
 
 - `arn` - ARN of the OU.
 - `child_accounts` - List of AWS accounts that are direct children of the OU. Dependant upon the `include_child_accounts` variable.
@@ -27,11 +27,9 @@ Each OU is represented as a Map with attributes
 
 ## Usage
 
-### As a resource
-
 ```hcl
 module "ous" {
-  source = "kurtismash/organizations-ous-by-path/aws"
+  source = "kurtismash/organizations-ous-by-path/aws//modules/resource"
   # We recommend explicitly constraining the acceptable version numbers to avoid unexpected or unwanted changes.
 
   organization_structure = {
@@ -66,45 +64,6 @@ resource "aws_organizations_policy_attachment" "scp" {
 }
 ```
 
-### As a data source
-
-```hcl
-module "ous" {
-  source = "kurtismash/organizations-ous-by-path/aws"
-  # We recommend explicitly constraining the acceptable version numbers to avoid unexpected or unwanted changes.
-}
-
-# Create a bucket and allow access from accounts within a specified OU.
-data "aws_iam_policy_document" "bucket_policy" {
-  statement {
-    principals {
-      type        = "AWS"
-      identifiers = ["*"]
-    }
-    actions = [
-      "s3:GetObject",
-      "s3:ListBucket",
-    ]
-    resources = [
-      aws_s3_bucket.bucket.arn,
-      "${aws_s3_bucket.bucket.arn}/*",
-    ]
-    condition {
-      test     = "ForAllValues:StringEquals"
-      variable = "aws:PrincipalOrgPaths"
-      values   = [module.ous.by_name_path["Level 1 OU/Level 2 OU"].id_path]
-    }
-  }
-}
-resource "aws_s3_bucket" "bucket" {
-  bucket_prefix = "bucket-"
-}
-resource "aws_s3_bucket_policy" "allow_access_from_another_account" {
-  bucket = aws_s3_bucket.bucket.id
-  policy = data.aws_iam_policy_document.bucket_policy.json
-}
-```
-
 ## Requirements
 
 | Name | Version |
@@ -114,18 +73,25 @@ resource "aws_s3_bucket_policy" "allow_access_from_another_account" {
 
 ## Providers
 
-No providers.
+| Name | Version |
+|------|---------|
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 4.55.0 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_data"></a> [data](#module\_data) | ./modules/data | n/a |
-| <a name="module_resource"></a> [resource](#module\_resource) | ./modules/resource | n/a |
+| <a name="module_l1"></a> [l1](#module\_l1) | ./modules/ou_level | n/a |
+| <a name="module_l2"></a> [l2](#module\_l2) | ./modules/ou_level | n/a |
+| <a name="module_l3"></a> [l3](#module\_l3) | ./modules/ou_level | n/a |
+| <a name="module_l4"></a> [l4](#module\_l4) | ./modules/ou_level | n/a |
+| <a name="module_l5"></a> [l5](#module\_l5) | ./modules/ou_level | n/a |
 
 ## Resources
 
-No resources.
+| Name | Type |
+|------|------|
+| [aws_organizations_organization.org](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/organizations_organization) | data source |
 
 ## Inputs
 
@@ -134,12 +100,12 @@ No resources.
 | <a name="input_include_child_accounts"></a> [include\_child\_accounts](#input\_include\_child\_accounts) | Include direct child AWS accounts in the output, increases the number of API calls when enabled. | `bool` | `false` | no |
 | <a name="input_include_descendant_accounts"></a> [include\_descendant\_accounts](#input\_include\_descendant\_accounts) | Include descendant AWS accounts in the output, increases complexity when enabled. | `bool` | `false` | no |
 | <a name="input_name_path_delimiter"></a> [name\_path\_delimiter](#input\_name\_path\_delimiter) | Delimiter used to join names in the name\_path attribute of each OU. | `string` | `"/"` | no |
-| <a name="input_organization_structure"></a> [organization\_structure](#input\_organization\_structure) | The structure of OUs to manage as a map of maps. If not provided, this module will function as a data source. | `any` | `{}` | no |
+| <a name="input_organization_structure"></a> [organization\_structure](#input\_organization\_structure) | The structure of the organization as a map of maps. | `any` | n/a | yes |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| <a name="output_by_id"></a> [by\_id](#output\_by\_id) | Map of OUs indexed by id. |
-| <a name="output_by_name_path"></a> [by\_name\_path](#output\_by\_name\_path) | Map of OUs indexed by name\_path. |
-| <a name="output_list"></a> [list](#output\_list) | List of OUs with added attributes id\_path and name\_path. |
+| <a name="output_by_id"></a> [by\_id](#output\_by\_id) | Map of managed OUs indexed by id. |
+| <a name="output_by_name_path"></a> [by\_name\_path](#output\_by\_name\_path) | Map of managed OUs indexed by name\_path. |
+| <a name="output_list"></a> [list](#output\_list) | List of managed OUs with added attributes id\_path and name\_path. |

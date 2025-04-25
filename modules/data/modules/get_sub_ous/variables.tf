@@ -3,6 +3,11 @@ variable "include_aws_accounts" {
   type        = bool
 }
 
+variable "name_path_delimiter" {
+  description = "Delimiter used to join names in the name_path attribute of each OU."
+  type        = string
+}
+
 variable "parent_level_ou_list" {
   description = "output.list from the previous level of OUs."
   type = list(object({
@@ -12,7 +17,3 @@ variable "parent_level_ou_list" {
   }))
 }
 
-variable "name_path_delimiter" {
-  description = "Delimiter used to join names in the name_path attribute of each OU."
-  type        = string
-}
