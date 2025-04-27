@@ -9,7 +9,7 @@ data "aws_organizations_organizational_units" "ous" {
 }
 
 data "aws_organizations_organizational_unit_child_accounts" "child_accounts" {
-  for_each  = !var.include_aws_accounts ? [] : toset(flatten([for parent_ou in data.aws_organizations_organizational_units.ous : [for child in parent_ou.children : child.id]]))
+  for_each  = toset(!var.include_aws_accounts ? [] : flatten([for parent_ou in data.aws_organizations_organizational_units.ous : [for child in parent_ou.children : child.id]]))
   parent_id = each.key
 }
 

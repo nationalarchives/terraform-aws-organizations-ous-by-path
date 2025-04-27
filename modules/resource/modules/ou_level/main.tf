@@ -10,7 +10,7 @@ resource "aws_organizations_organizational_unit" "ous" {
 
 data "aws_organizations_organizational_unit_child_accounts" "child_accounts" {
   # The aws_organizations_organizational_unit resource doesn't include the account status, so we need to use the data source to get it.
-  for_each  = !var.include_aws_accounts ? [] : toset(var.ou_name_paths)
+  for_each  = toset(!var.include_aws_accounts ? [] : var.ou_name_paths)
   parent_id = aws_organizations_organizational_unit.ous[each.key].id
 }
 
