@@ -8,16 +8,15 @@ resource "aws_organizations_organizational_unit" "ous" {
   parent_id = local.is_level1 ? var.parent_level_ou_map["Root"].id : var.parent_level_ou_map[trimsuffix(each.key, "${var.name_path_delimiter}${element(split(var.name_path_delimiter, each.key), -1)}")].id
 }
 
-data "aws_organizations_organizational_unit_child_accounts" "child_accounts" {
-  # The aws_organizations_organizational_unit resource doesn't include the account status, so we need to use the data source to get it.
-  for_each  = toset(!var.include_aws_accounts ? [] : var.ou_name_paths)
-  parent_id = aws_organizations_organizational_unit.ous[each.key].id
-}
-
 locals {
   output_map = { for name_path, ou in aws_organizations_organizational_unit.ous : name_path => {
-    arn                 = ou.arn
-    child_accounts      = !var.include_aws_accounts ? null : data.aws_organizations_organizational_unit_child_accounts.child_accounts[name_path].accounts
+    arn = ou.arn
+    child_accounts = !var.include_aws_accounts ? null : [for account in ou.accounts : {
+      arn   = account.arn
+      email = account.email
+      id    = account.id
+      name  = account.name
+    }]
     descendant_accounts = null
     id                  = ou.id
     id_path             = local.is_level1 ? "${var.parent_level_ou_map["Root"].id_path}${ou.id}/" : join("", [var.parent_level_ou_map[trimsuffix(name_path, "${var.name_path_delimiter}${element(split(var.name_path_delimiter, name_path), -1)}")].id_path, ou.id, "/"])
