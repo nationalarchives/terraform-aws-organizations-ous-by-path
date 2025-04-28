@@ -1,9 +1,9 @@
 locals {
-  isResource = length(var.organization_structure) > 0 ? true : false
+  is_resource = length(var.organization_structure) > 0 ? true : false
 }
 
 module "data" {
-  count  = local.isResource ? 0 : 1
+  count  = local.is_resource ? 0 : 1
   source = "./modules/data"
 
   include_child_accounts      = var.include_child_accounts
@@ -12,7 +12,7 @@ module "data" {
 }
 
 module "resource" {
-  count  = local.isResource ? 1 : 0
+  count  = local.is_resource ? 1 : 0
   source = "./modules/resource"
 
   include_child_accounts      = var.include_child_accounts
