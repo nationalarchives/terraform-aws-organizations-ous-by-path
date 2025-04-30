@@ -18,13 +18,13 @@ locals {
     for parent_id, ou_data in data.aws_organizations_organizational_units.ous : [
       for ou in ou_data.children : {
         arn = ou.arn
-        child_accounts = !var.include_aws_accounts ? null : [for account in data.aws_organizations_organizational_unit_child_accounts.child_accounts[ou.id].accounts : {
+        child_accounts = !var.include_aws_accounts ? [] : [for account in data.aws_organizations_organizational_unit_child_accounts.child_accounts[ou.id].accounts : {
           arn   = account.arn
           email = account.email
           id    = account.id
           name  = account.name
         }]
-        descendant_accounts = null
+        descendant_accounts = []
         id                  = ou.id
         id_path             = "${local.parent_level_ou_map[parent_id].id_path}${ou.id}/"
         name                = ou.name

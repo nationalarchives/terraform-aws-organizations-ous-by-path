@@ -11,13 +11,13 @@ resource "aws_organizations_organizational_unit" "ous" {
 locals {
   output_map = { for name_path, ou in aws_organizations_organizational_unit.ous : name_path => {
     arn = ou.arn
-    child_accounts = !var.include_aws_accounts ? null : [for account in ou.accounts : {
+    child_accounts = !var.include_aws_accounts ? [] : [for account in ou.accounts : {
       arn   = account.arn
       email = account.email
       id    = account.id
       name  = account.name
     }]
-    descendant_accounts = null
+    descendant_accounts = []
     id                  = ou.id
     id_path             = local.is_level1 ? "${var.parent_level_ou_map["Root"].id_path}${ou.id}/" : join("", [var.parent_level_ou_map[trimsuffix(name_path, "${var.name_path_delimiter}${element(split(var.name_path_delimiter, name_path), -1)}")].id_path, ou.id, "/"])
     name                = ou.name

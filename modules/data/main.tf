@@ -58,10 +58,7 @@ locals {
     module.l5.list
   )
 
-  # Add descendant account lists (if required)
-  ous_with_descendant_accounts = !var.include_descendant_accounts ? [] : [for ou in local.all_ous : merge(ou, {
+  output_list = !var.include_descendant_accounts ? local.all_ous : [for ou in local.all_ous : merge(ou, {
     descendant_accounts = flatten([for i in local.all_ous : i.child_accounts if strcontains(i.id_path, ou.id)])
   })]
-
-  output_list = var.include_descendant_accounts ? local.ous_with_descendant_accounts : local.all_ous
 }
