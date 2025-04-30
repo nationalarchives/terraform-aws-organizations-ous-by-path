@@ -103,6 +103,7 @@ resource "aws_s3_bucket_policy" "allow_access_from_another_account" {
 }
 ```
 
+<!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
@@ -141,3 +142,4 @@ No resources.
 | <a name="output_by_id"></a> [by\_id](#output\_by\_id) | Map of OUs indexed by id. |
 | <a name="output_by_name_path"></a> [by\_name\_path](#output\_by\_name\_path) | Map of OUs indexed by name\_path. |
 | <a name="output_list"></a> [list](#output\_list) | List of OUs with added attributes id\_path and name\_path. |
+<!-- END_TF_DOCS -->

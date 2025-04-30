@@ -62,6 +62,7 @@ resource "aws_organizations_policy_attachment" "scp" {
 }
 ```
 
+<!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
@@ -73,7 +74,7 @@ resource "aws_organizations_policy_attachment" "scp" {
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 4.55.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.96.0 |
 
 ## Modules
 
@@ -98,7 +99,7 @@ resource "aws_organizations_policy_attachment" "scp" {
 | <a name="input_include_child_accounts"></a> [include\_child\_accounts](#input\_include\_child\_accounts) | Include direct child AWS accounts in the output, increases the number of API calls when enabled. | `bool` | `false` | no |
 | <a name="input_include_descendant_accounts"></a> [include\_descendant\_accounts](#input\_include\_descendant\_accounts) | Include descendant AWS accounts in the output, increases complexity when enabled. | `bool` | `false` | no |
 | <a name="input_name_path_delimiter"></a> [name\_path\_delimiter](#input\_name\_path\_delimiter) | Delimiter used to join names in the name\_path attribute of each OU. | `string` | `"/"` | no |
-| <a name="input_organization_structure"></a> [organization\_structure](#input\_organization\_structure) | The structure of the organization as a map of maps. | `any` | n/a | yes |
+| <a name="input_organization_structure"></a> [organization\_structure](#input\_organization\_structure) | The structure of OUs to manage as a map of maps. | `any` | n/a | yes |
 
 ## Outputs
 
@@ -107,3 +108,4 @@ resource "aws_organizations_policy_attachment" "scp" {
 | <a name="output_by_id"></a> [by\_id](#output\_by\_id) | Map of managed OUs indexed by id. |
 | <a name="output_by_name_path"></a> [by\_name\_path](#output\_by\_name\_path) | Map of managed OUs indexed by name\_path. |
 | <a name="output_list"></a> [list](#output\_list) | List of managed OUs with added attributes id\_path and name\_path. |
+<!-- END_TF_DOCS -->
