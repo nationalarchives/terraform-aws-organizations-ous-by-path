@@ -1,18 +1,22 @@
-# AWS Organizational Units by path - Resource sub-module
+# Terraform module: AWS Organizations OUs by path - Resource sub-module
 
-A Terraform module to **create** and **expose** managed AWS Organizations Organizational Units with their relative paths from the Organization root.
+A Terraform module to **manage** AWS Organizations Organizational Units with their paths from the Organization root.
 
-The organization structure can be defined as a map, then accessed via a list or through indexed maps, see <a name="Outputs"></a> [Outputs](#Outputs) for more information.
+- Supports up to **5 levels** of Organizational Units (AWS Quota).
+- Define your organization structure as a map.
+- Generates OrgPaths, to be used with the `aws:PrincipalOrgPaths` and `aws:ResourceOrgPaths` IAM conditions.
+- Organizational Units are exposed via a list and indexed maps, see <a name="Outputs"></a> [Outputs](#Outputs) for more information.
 
+<br/>
 Each OU is represented as a map with attributes
 
 - `arn` - ARN of the OU.
-- `child_accounts` - List of AWS accounts that are direct children of the OU. Dependant upon the `include_child_accounts` variable.
+- `child_accounts` - List of AWS accounts that are direct children of the OU. Dependent upon the `include_child_accounts` variable.
   - `arn` - ARN of the account.
   - `email` - Email of the account.
   - `id` - Identifier of the account.
   - `name` - Name of the account.
-- `descendant_accounts` - List of AWS accounts that are direct children or descendants of the OU. Dependant upon the `include_descendant_accounts` variable.
+- `descendant_accounts` - List of AWS accounts that are direct children or descendants of the OU. Dependent upon the `include_descendant_accounts` variable.
   - `arn` - ARN of the account.
   - `email` - Email of the account.
   - `id` - Identifier of the account.
