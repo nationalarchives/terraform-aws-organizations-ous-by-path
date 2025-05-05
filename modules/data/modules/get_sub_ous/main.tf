@@ -26,9 +26,9 @@ locals {
         }]
         descendant_accounts = []
         id                  = ou.id
-        id_path             = "${local.parent_level_ou_map[parent_id].id_path}${ou.id}/"
         name                = ou.name
         name_path           = local.is_level1 ? ou.name : "${local.parent_level_ou_map[parent_id].name_path}${var.name_path_delimiter}${ou.name}"
+        org_path            = "${local.parent_level_ou_map[parent_id].org_path}${ou.id}/"
         parent_id           = parent_id
       }
     ]

@@ -1,9 +1,9 @@
 data "aws_organizations_organization" "org" {}
 
 locals {
-  org_id         = data.aws_organizations_organization.org.id
-  root_id        = data.aws_organizations_organization.org.roots[0].id
-  id_path_prefix = "${local.org_id}/${local.root_id}/"
+  org_id          = data.aws_organizations_organization.org.id
+  root_id         = data.aws_organizations_organization.org.roots[0].id
+  org_path_prefix = "${local.org_id}/${local.root_id}/"
 }
 
 module "l1" {
@@ -13,8 +13,8 @@ module "l1" {
   # Mock a "level0_ous" module output for the root.
   parent_level_ou_list = [{
     id        = local.root_id
-    id_path   = local.id_path_prefix
     name_path = ""
+    org_path  = local.org_path_prefix
   }]
 }
 
@@ -59,6 +59,6 @@ locals {
   )
 
   output_list = !var.include_descendant_accounts ? local.all_ous : [for ou in local.all_ous : merge(ou, {
-    descendant_accounts = flatten([for i in local.all_ous : i.child_accounts if strcontains(i.id_path, ou.id)])
+    descendant_accounts = flatten([for i in local.all_ous : i.child_accounts if strcontains(i.org_path, ou.id)])
   })]
 }

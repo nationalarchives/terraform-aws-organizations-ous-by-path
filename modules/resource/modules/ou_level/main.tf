@@ -19,9 +19,9 @@ locals {
     }]
     descendant_accounts = []
     id                  = ou.id
-    id_path             = local.is_level1 ? "${var.parent_level_ou_map["Root"].id_path}${ou.id}/" : join("", [var.parent_level_ou_map[trimsuffix(name_path, "${var.name_path_delimiter}${element(split(var.name_path_delimiter, name_path), -1)}")].id_path, ou.id, "/"])
     name                = ou.name
     name_path           = name_path
+    org_path            = local.is_level1 ? "${var.parent_level_ou_map["Root"].org_path}${ou.id}/" : join("", [var.parent_level_ou_map[trimsuffix(name_path, "${var.name_path_delimiter}${element(split(var.name_path_delimiter, name_path), -1)}")].org_path, ou.id, "/"])
     parent_id           = ou.parent_id
     }
   }

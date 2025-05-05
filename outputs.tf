@@ -9,6 +9,6 @@ output "by_name_path" {
 }
 
 output "list" {
-  description = "List of OUs with added attributes id_path and name_path."
+  description = "List of OUs with added attributes name_path and org_path."
   value       = [for ou in local.output_map : ou]
 }

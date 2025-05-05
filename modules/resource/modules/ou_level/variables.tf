@@ -17,7 +17,7 @@ variable "parent_level_ou_map" {
   description = "output.list from the previous level of OUs."
   type = map(object({
     id        = string
-    id_path   = string
     name_path = string
+    org_path  = string
   }))
 }
