@@ -67,49 +67,51 @@ resource "aws_organizations_policy_attachment" "scp" {
 ```
 
 <!-- BEGIN_TF_DOCS -->
+
 ## Requirements
 
-| Name | Version |
-|------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.10.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4.55.0 |
+| Name                                                                     | Version   |
+| ------------------------------------------------------------------------ | --------- |
+| <a name="requirement_terraform"></a> [terraform](#requirement_terraform) | >= 1.10.0 |
+| <a name="requirement_aws"></a> [aws](#requirement_aws)                   | >= 4.55.0 |
 
 ## Providers
 
-| Name | Version |
-|------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.96.0 |
+| Name                                             | Version |
+| ------------------------------------------------ | ------- |
+| <a name="provider_aws"></a> [aws](#provider_aws) | 5.96.0  |
 
 ## Modules
 
-| Name | Source | Version |
-|------|--------|---------|
-| <a name="module_l1"></a> [l1](#module\_l1) | ./modules/ou_level | n/a |
-| <a name="module_l2"></a> [l2](#module\_l2) | ./modules/ou_level | n/a |
-| <a name="module_l3"></a> [l3](#module\_l3) | ./modules/ou_level | n/a |
-| <a name="module_l4"></a> [l4](#module\_l4) | ./modules/ou_level | n/a |
-| <a name="module_l5"></a> [l5](#module\_l5) | ./modules/ou_level | n/a |
+| Name                                      | Source             | Version |
+| ----------------------------------------- | ------------------ | ------- |
+| <a name="module_l1"></a> [l1](#module_l1) | ./modules/ou_level | n/a     |
+| <a name="module_l2"></a> [l2](#module_l2) | ./modules/ou_level | n/a     |
+| <a name="module_l3"></a> [l3](#module_l3) | ./modules/ou_level | n/a     |
+| <a name="module_l4"></a> [l4](#module_l4) | ./modules/ou_level | n/a     |
+| <a name="module_l5"></a> [l5](#module_l5) | ./modules/ou_level | n/a     |
 
 ## Resources
 
-| Name | Type |
-|------|------|
+| Name                                                                                                                                            | Type        |
+| ----------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
 | [aws_organizations_organization.org](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/organizations_organization) | data source |
 
 ## Inputs
 
-| Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
-| <a name="input_include_child_accounts"></a> [include\_child\_accounts](#input\_include\_child\_accounts) | Include direct child AWS accounts in the output, increases the number of API calls when enabled. | `bool` | `false` | no |
-| <a name="input_include_descendant_accounts"></a> [include\_descendant\_accounts](#input\_include\_descendant\_accounts) | Include descendant AWS accounts in the output, increases complexity when enabled. | `bool` | `false` | no |
-| <a name="input_name_path_delimiter"></a> [name\_path\_delimiter](#input\_name\_path\_delimiter) | Delimiter used to join names in the name\_path attribute of each OU. | `string` | `"/"` | no |
-| <a name="input_organization_structure"></a> [organization\_structure](#input\_organization\_structure) | The structure of OUs to manage as a map of maps. | `any` | n/a | yes |
+| Name                                                                                                               | Description                                                                                      | Type     | Default | Required |
+| ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------ | -------- | ------- | :------: |
+| <a name="input_include_child_accounts"></a> [include_child_accounts](#input_include_child_accounts)                | Include direct child AWS accounts in the output, increases the number of API calls when enabled. | `bool`   | `false` |    no    |
+| <a name="input_include_descendant_accounts"></a> [include_descendant_accounts](#input_include_descendant_accounts) | Include descendant AWS accounts in the output, increases complexity when enabled.                | `bool`   | `false` |    no    |
+| <a name="input_name_path_delimiter"></a> [name_path_delimiter](#input_name_path_delimiter)                         | Delimiter used to join names in the name_path attribute of each OU.                              | `string` | `"/"`   |    no    |
+| <a name="input_organization_structure"></a> [organization_structure](#input_organization_structure)                | The structure of OUs to manage as a map of maps.                                                 | `any`    | n/a     |   yes    |
 
 ## Outputs
 
-| Name | Description |
-|------|-------------|
-| <a name="output_by_id"></a> [by\_id](#output\_by\_id) | Map of managed OUs indexed by id. |
-| <a name="output_by_name_path"></a> [by\_name\_path](#output\_by\_name\_path) | Map of managed OUs indexed by name\_path. |
-| <a name="output_list"></a> [list](#output\_list) | List of managed OUs with added attributes name\_path and org\_path. |
+| Name                                                                    | Description                                                       |
+| ----------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| <a name="output_by_id"></a> [by_id](#output_by_id)                      | Map of managed OUs indexed by id.                                 |
+| <a name="output_by_name_path"></a> [by_name_path](#output_by_name_path) | Map of managed OUs indexed by name_path.                          |
+| <a name="output_list"></a> [list](#output_list)                         | List of managed OUs with added attributes name_path and org_path. |
+
 <!-- END_TF_DOCS -->
