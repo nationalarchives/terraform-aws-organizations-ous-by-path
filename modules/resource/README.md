@@ -1,6 +1,6 @@
 # Terraform module: AWS Organizations OUs by path - Resource sub-module
 
-A Terraform module to **manage** AWS Organizations Organizational Units with their paths from the Organization root.
+An open-source Terraform module to **manage** AWS Organizations Organizational Units with their paths from the Organization root.
 
 - Supports up to **5 levels** of Organizational Units (AWS Quota).
 - Define your organization structure as a map.
@@ -31,7 +31,7 @@ Each OU is represented as a map with attributes
 
 ```hcl
 module "ous" {
-  source = "kurtismash/organizations-ous-by-path/aws//modules/resource"
+  source = "nationalarchives/organizations-ous-by-path/aws//modules/resource"
   # It's recommended to explicitly constrain the acceptable version numbers to avoid unexpected or unwanted changes.
 
   organization_structure = {

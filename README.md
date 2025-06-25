@@ -1,8 +1,6 @@
 # Terraform module: AWS Organizations OUs by path
 
-> :warning: **NOTICE:** This module has moved to the `nationalarchives` GitHub organization, please update your source accordingly. The module is now available at [nationalarchives/terraform-aws-organizations-ous-by-path](https://github.com/nationalarchives/terraform-aws-organizations-ous-by-path).
-
-A Terraform module to create and/or expose AWS Organizations Organizational Units with their paths from the Organization root.
+An open-source Terraform module to create and/or expose AWS Organizations Organizational Units with their paths from the Organization root.
 
 - Can be used as a **resource** or **data source** with the same outputs.
 - Supports up to **5 levels** of Organizational Units (AWS Quota).
@@ -36,7 +34,7 @@ Each OU is represented as a map with attributes
 
 ```hcl
 module "ous" {
-  source = "kurtismash/organizations-ous-by-path/aws"
+  source = "nationalarchives/organizations-ous-by-path/aws"
   # It's recommended to explicitly constrain the acceptable version numbers to avoid unexpected or unwanted changes.
 
   organization_structure = {
@@ -75,7 +73,7 @@ resource "aws_organizations_policy_attachment" "scp" {
 
 ```hcl
 module "ous" {
-  source = "kurtismash/organizations-ous-by-path/aws"
+  source = "nationalarchives/organizations-ous-by-path/aws"
   # It's recommended to explicitly constrain the acceptable version numbers to avoid unexpected or unwanted changes.
 }
 
@@ -152,3 +150,11 @@ No resources.
 | <a name="output_list"></a> [list](#output_list)                         | List of OUs with added attributes name_path and org_path. |
 
 <!-- END_TF_DOCS -->
+
+## About The National Archives, UK
+
+We are a non-ministerial department, and the official archive and publisher for the UK Government, and for England and Wales. We are the guardians of over 1,000 years of iconic national documents.
+
+We are expert advisers in information and records management and are a cultural, academic and heritage institution. We fulfil a leadership role for the archive sector and work to secure the future of physical and digital records.
+
+Find out more about [what we do](https://www.nationalarchives.gov.uk/about/our-role/what-we-do/).
