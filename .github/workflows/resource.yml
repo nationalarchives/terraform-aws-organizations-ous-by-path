@@ -1,4 +1,4 @@
-name: OU Terraform plan
+name: OU Terraform Plan
 on:
   workflow_dispatch:
   push:

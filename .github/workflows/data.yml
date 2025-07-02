@@ -1,4 +1,4 @@
-name: OU data lookup
+name: OU Data Lookup
 on:
   workflow_dispatch:
   push:
