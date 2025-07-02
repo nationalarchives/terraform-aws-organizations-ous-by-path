@@ -38,11 +38,11 @@ jobs:
         run: terraform fmt -check -recursive
 
       - name: Terraform init
-        working-directory: ./examples/data
+        working-directory: ./examples/resource
         run: terraform init -get -backend=false
 
       - name: Terraform validate
-        working-directory: ./examples/data
+        working-directory: ./examples/resource
         run: terraform validate
         
   secret_scan:
@@ -74,7 +74,7 @@ jobs:
       - secret_scan
     defaults:
       run:
-        working-directory: ./examples/data
+        working-directory: ./examples/resource
 
     permissions:
       id-token: write
