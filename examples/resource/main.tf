@@ -23,7 +23,7 @@ module "ous" {
         "CA" = {
           "Cloud CA" = {},
           "ECDSA CA" = {},
-          "RSA CA" = {}
+          "RSA CA"   = {}
         },
         "Cloud Apps" = {}
       }
