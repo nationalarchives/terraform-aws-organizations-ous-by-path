@@ -17,9 +17,16 @@ module "ous" {
       "Application" = {
         "Development" = {},
         "Staging"     = {},
-        "Production"  = {},
+        "Production"  = {}
       },
-      "Serverless" = {}
+      "Serverless" = {
+        "CA" = {
+          "Cloud CA" = {},
+          "ECDSA CA" = {},
+          "RSA CA" = {}
+        },
+        "Cloud Apps" = {}
+      }
     }
   }
 }
