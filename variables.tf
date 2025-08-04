@@ -15,6 +15,12 @@ variable "include_descendant_accounts" {
   }
 }
 
+variable "include_ou_tags" {
+  description = "Include tags for each OU in the output, increases the number of API calls when enabled. Has no effect when organization_structure is provided."
+  type        = bool
+  default     = false
+}
+
 variable "name_path_delimiter" {
   description = "Delimiter used to join names in the name_path attribute of each OU."
   type        = string
@@ -29,5 +35,16 @@ variable "organization_structure" {
   validation {
     condition     = !strcontains(jsonencode(var.organization_structure), var.name_path_delimiter)
     error_message = "OU names cannot contain the name_path_delimiter."
+  }
+}
+
+variable "ou_tags_key" {
+  description = "A key that will be ignored within organization_structure, and will instead be used to define a map of tags for the OU."
+  type        = string
+  default     = null
+
+  validation {
+    condition     = var.ou_tags_key != null ? length(var.organization_structure) > 0 : true
+    error_message = "ou_tags_key can only be set if organization_structure is provided."
   }
 }

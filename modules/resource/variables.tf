@@ -34,3 +34,14 @@ variable "organization_structure" {
     error_message = "OU names cannot contain \"${local.internal_name_path_delimiter}\" as this is used within the module to separate levels."
   }
 }
+
+variable "ou_tags_key" {
+  description = "A key that will be ignored within organization_structure, and will instead be used to define a map of tags for the OU."
+  type        = string
+  default     = null
+
+  validation {
+    condition     = var.ou_tags_key != null ? length(var.organization_structure) > 0 : true
+    error_message = "ou_tags_key can only be set if organization_structure is provided."
+  }
+}
