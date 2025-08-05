@@ -11,43 +11,63 @@ locals {
   # Convert the nested map structure into a map of objects with paths and tags
   # { "Level1:::Level2:::Level3:::Level4:::Level5" : {"tags": {"key": "value"} }
   # Terraform can't do recursion, so we have to do this manually.
+  l0_cascading_tags = lookup(var.organization_structure, var.cascading_tags_key, {})
   ous_to_create = {
     for ou_path in concat(
       # Level 1
       [for l1_k, l1_v in var.organization_structure : {
         path = l1_k
-        tags = var.ou_tags_key != null ? try(l1_v[var.ou_tags_key], {}) : {}
-      }],
+        tags = merge(
+          local.l0_cascading_tags,
+          lookup(l1_v, var.cascading_tags_key, {}),
+          lookup(l1_v, var.static_tags_key, {})
+        )
+      } if !contains([var.cascading_tags_key, var.static_tags_key], l1_k)],
       # Level 2
       flatten([for l1_k, l1_v in var.organization_structure :
         [for l2_k, l2_v in try(l1_v, {}) : {
           path = join(local.internal_name_path_delimiter, [l1_k, l2_k])
-          tags = var.ou_tags_key != null ? try(l2_v[var.ou_tags_key], {}) : {}
-        } if l2_k != var.ou_tags_key]
-      ]),
+          tags = merge(
+            local.l0_cascading_tags,
+            lookup(l1_v, var.cascading_tags_key, {}),
+            lookup(l2_v, var.cascading_tags_key, {}),
+            lookup(l2_v, var.static_tags_key, {})
+          )
+        } if !contains([var.cascading_tags_key, var.static_tags_key], l2_k)]
+      if !contains([var.cascading_tags_key, var.static_tags_key], l1_k)]),
       # Level 3
       flatten([for l1_k, l1_v in var.organization_structure :
         flatten([for l2_k, l2_v in try(l1_v, {}) :
           [for l3_k, l3_v in try(l2_v, {}) : {
             path = join(local.internal_name_path_delimiter, [l1_k, l2_k, l3_k])
-            tags = var.ou_tags_key != null ? try(l3_v[var.ou_tags_key], {}) : {}
-          } if l3_k != var.ou_tags_key]
-          if l2_k != var.ou_tags_key
-        ])
-      ]),
+            tags = merge(
+              local.l0_cascading_tags,
+              lookup(l1_v, var.cascading_tags_key, {}),
+              lookup(l2_v, var.cascading_tags_key, {}),
+              lookup(l3_v, var.cascading_tags_key, {}),
+              lookup(l3_v, var.static_tags_key, {})
+            )
+          } if !contains([var.cascading_tags_key, var.static_tags_key], l3_k)]
+        if !contains([var.cascading_tags_key, var.static_tags_key], l2_k)])
+      if !contains([var.cascading_tags_key, var.static_tags_key], l1_k)]),
       # Level 4
       flatten([for l1_k, l1_v in var.organization_structure :
         flatten([for l2_k, l2_v in try(l1_v, {}) :
           flatten([for l3_k, l3_v in try(l2_v, {}) :
             [for l4_k, l4_v in try(l3_v, {}) : {
               path = join(local.internal_name_path_delimiter, [l1_k, l2_k, l3_k, l4_k])
-              tags = var.ou_tags_key != null ? try(l4_v[var.ou_tags_key], {}) : {}
-            } if l4_k != var.ou_tags_key]
-            if l3_k != var.ou_tags_key
-          ])
-          if l2_k != var.ou_tags_key
-        ])
-      ]),
+              tags = merge(
+                local.l0_cascading_tags,
+                lookup(l1_v, var.cascading_tags_key, {}),
+                lookup(l2_v, var.cascading_tags_key, {}),
+                lookup(l3_v, var.cascading_tags_key, {}),
+                lookup(l4_v, var.cascading_tags_key, {}),
+                lookup(l4_v, var.static_tags_key, {})
+              )
+            } if !contains([var.cascading_tags_key, var.static_tags_key], l4_k)]
+          if !contains([var.cascading_tags_key, var.static_tags_key], l3_k)])
+        if !contains([var.cascading_tags_key, var.static_tags_key], l2_k)])
+      if !contains([var.cascading_tags_key, var.static_tags_key], l1_k)]),
       # Level 5
       flatten([for l1_k, l1_v in var.organization_structure :
         flatten([for l2_k, l2_v in try(l1_v, {}) :
@@ -55,15 +75,20 @@ locals {
             flatten([for l4_k, l4_v in try(l3_v, {}) :
               [for l5_k, l5_v in try(l4_v, {}) : {
                 path = join(local.internal_name_path_delimiter, [l1_k, l2_k, l3_k, l4_k, l5_k])
-                tags = var.ou_tags_key != null ? try(l5_v[var.ou_tags_key], {}) : {}
-              } if l5_k != var.ou_tags_key]
-              if l4_k != var.ou_tags_key
-            ])
-            if l3_k != var.ou_tags_key
-          ])
-          if l2_k != var.ou_tags_key
-        ])
-      ])
+                tags = merge(
+                  local.l0_cascading_tags,
+                  lookup(l1_v, var.cascading_tags_key, {}),
+                  lookup(l2_v, var.cascading_tags_key, {}),
+                  lookup(l3_v, var.cascading_tags_key, {}),
+                  lookup(l4_v, var.cascading_tags_key, {}),
+                  lookup(l5_v, var.cascading_tags_key, {}),
+                  lookup(l5_v, var.static_tags_key, {})
+                )
+              } if !contains([var.cascading_tags_key, var.static_tags_key], l5_k)]
+            if !contains([var.cascading_tags_key, var.static_tags_key], l4_k)])
+          if !contains([var.cascading_tags_key, var.static_tags_key], l3_k)])
+        if !contains([var.cascading_tags_key, var.static_tags_key], l2_k)])
+      if !contains([var.cascading_tags_key, var.static_tags_key], l1_k)])
       ) : ou_path.path => {
       tags = ou_path.tags
     }
@@ -72,9 +97,6 @@ locals {
 }
 
 # Create the OUs
-
-#[for i in local.ou_list : join(local.internal_name_path_delimiter, slice(split(local.internal_name_path_delimiter, i), 0, 1)) if length(split(local.internal_name_path_delimiter, i)) >= 1]
-
 module "l1" {
   source               = "./modules/ou_level"
   include_aws_accounts = var.include_child_accounts

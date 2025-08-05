@@ -4,6 +4,7 @@ An open-source Terraform module to **manage** AWS Organizations Organizational U
 
 - Supports up to **5 levels** of Organizational Units (AWS Quota).
 - Define your organization structure as a map.
+- Tag each OU and cascade tags to child OUs.
 - Generates OrgPaths, to be used with the `aws:PrincipalOrgPaths` and `aws:ResourceOrgPaths` IAM conditions.
 - Organizational Units are exposed via a list and indexed maps, see <a name="Outputs"></a> [Outputs](#Outputs) for more information.
 
@@ -101,11 +102,12 @@ resource "aws_organizations_policy_attachment" "scp" {
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_cascading_tags_key"></a> [cascading\_tags\_key](#input\_cascading\_tags\_key) | A key that will be ignored within organization\_structure, and will instead be used to define a map of tags for the OU. These tags will cascade to child OUs if the same key isn't defined on a nested OU. | `string` | `""` | no |
 | <a name="input_include_child_accounts"></a> [include\_child\_accounts](#input\_include\_child\_accounts) | Include direct child AWS accounts in the output, increases the number of API calls when enabled. | `bool` | `false` | no |
 | <a name="input_include_descendant_accounts"></a> [include\_descendant\_accounts](#input\_include\_descendant\_accounts) | Include descendant AWS accounts in the output, increases complexity when enabled. | `bool` | `false` | no |
 | <a name="input_name_path_delimiter"></a> [name\_path\_delimiter](#input\_name\_path\_delimiter) | Delimiter used to join names in the name\_path attribute of each OU. | `string` | `"/"` | no |
 | <a name="input_organization_structure"></a> [organization\_structure](#input\_organization\_structure) | The structure of OUs to manage as a map of maps. | `any` | n/a | yes |
-| <a name="input_ou_tags_key"></a> [ou\_tags\_key](#input\_ou\_tags\_key) | A key that will be ignored within organization\_structure, and will instead be used to define a map of tags for the OU. | `string` | `null` | no |
+| <a name="input_static_tags_key"></a> [static\_tags\_key](#input\_static\_tags\_key) | A key that will be ignored within organization\_structure, and will instead be used to define a map of tags on the OU. | `string` | `""` | no |
 
 ## Outputs
 

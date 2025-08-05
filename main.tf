@@ -20,7 +20,8 @@ module "resource" {
   include_descendant_accounts = var.include_descendant_accounts
   name_path_delimiter         = var.name_path_delimiter
   organization_structure      = var.organization_structure
-  ou_tags_key                 = var.ou_tags_key
+  cascading_tags_key          = var.cascading_tags_key
+  static_tags_key             = var.static_tags_key
 }
 
 locals {

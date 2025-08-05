@@ -1,3 +1,16 @@
+locals {
+  ignore_keys_in_organization_structure_validation = [
+    var.cascading_tags_key,
+    var.static_tags_key
+  ]
+}
+
+variable "cascading_tags_key" {
+  description = "A key that will be ignored within organization_structure, and will instead be used to define a map of tags for the OU. These tags will cascade to child OUs if the same key isn't defined on a nested OU."
+  type        = string
+  default     = ""
+}
+
 variable "include_child_accounts" {
   description = "Include direct child AWS accounts in the output, increases the number of API calls when enabled."
   type        = bool
@@ -26,22 +39,95 @@ variable "organization_structure" {
   type        = any
 
   validation {
-    condition     = !strcontains(jsonencode(var.organization_structure), var.name_path_delimiter)
-    error_message = "OU names cannot contain the name_path_delimiter."
+    # var.name_path_delimiter may be used in the tag keys/values
+    condition = alltrue(concat(
+      # Level 1
+      [for l1_k in keys(var.organization_structure) :
+      !strcontains(l1_k, var.name_path_delimiter) || contains(local.ignore_keys_in_organization_structure_validation, l1_k)],
+      # Level 2
+      flatten([for l1_k, l1_v in var.organization_structure : [
+        for l2_k in try(keys(l1_v), []) :
+        !strcontains(l2_k, var.name_path_delimiter) || contains(local.ignore_keys_in_organization_structure_validation, l2_k)
+      ] if !contains(local.ignore_keys_in_organization_structure_validation, l1_k)]),
+      # Level 3
+      flatten([for l1_k, l1_v in var.organization_structure :
+        flatten([for l2_k, l2_v in try(l1_v, {}) : [
+          for l3_k in try(keys(l2_v), []) :
+          !strcontains(l3_k, var.name_path_delimiter) || contains(local.ignore_keys_in_organization_structure_validation, l3_k)
+        ] if !contains(local.ignore_keys_in_organization_structure_validation, l2_k)])
+      if !contains(local.ignore_keys_in_organization_structure_validation, l1_k)]),
+      # Level 4
+      flatten([for l1_k, l1_v in var.organization_structure :
+        flatten([for l2_k, l2_v in try(l1_v, {}) :
+          flatten([for l3_k, l3_v in try(l2_v, {}) : [
+            for l4_k in try(keys(l3_v), []) :
+            !strcontains(l4_k, var.name_path_delimiter) || contains(local.ignore_keys_in_organization_structure_validation, l4_k)
+          ] if !contains(local.ignore_keys_in_organization_structure_validation, l3_k)])
+        if !contains(local.ignore_keys_in_organization_structure_validation, l2_k)])
+      if !contains(local.ignore_keys_in_organization_structure_validation, l1_k)]),
+      # Level 5
+      flatten([for l1_k, l1_v in var.organization_structure :
+        flatten([for l2_k, l2_v in try(l1_v, {}) :
+          flatten([for l3_k, l3_v in try(l2_v, {}) :
+            flatten([for l4_k, l4_v in try(l3_v, {}) : [
+              for l5_k in try(keys(l4_v), []) :
+              !strcontains(l5_k, var.name_path_delimiter) || contains(local.ignore_keys_in_organization_structure_validation, l5_k)
+            ] if !contains(local.ignore_keys_in_organization_structure_validation, l4_k)])
+          if !contains(local.ignore_keys_in_organization_structure_validation, l3_k)])
+        if !contains(local.ignore_keys_in_organization_structure_validation, l2_k)])
+      if !contains(local.ignore_keys_in_organization_structure_validation, l1_k)])
+    ))
+    error_message = "OU names cannot contain the name_path_delimiter (${var.name_path_delimiter}), except within ${var.cascading_tags_key} or ${var.static_tags_key} properties."
   }
   validation {
-    condition     = !strcontains(jsonencode(var.organization_structure), local.internal_name_path_delimiter)
-    error_message = "OU names cannot contain \"${local.internal_name_path_delimiter}\" as this is used within the module to separate levels."
+    # ":::" may be used in the tag keys/values
+    condition = alltrue(concat(
+      # Level 1
+      [for l1_k in keys(var.organization_structure) :
+      !strcontains(l1_k, ":::") || contains(local.ignore_keys_in_organization_structure_validation, l1_k)],
+      # Level 2
+      flatten([for l1_k, l1_v in var.organization_structure : [
+        for l2_k in try(keys(l1_v), []) :
+        !strcontains(l2_k, ":::") || contains(local.ignore_keys_in_organization_structure_validation, l2_k)
+      ] if !contains(local.ignore_keys_in_organization_structure_validation, l1_k)]),
+      # Level 3
+      flatten([for l1_k, l1_v in var.organization_structure :
+        flatten([for l2_k, l2_v in try(l1_v, {}) : [
+          for l3_k in try(keys(l2_v), []) :
+          !strcontains(l3_k, ":::") || contains(local.ignore_keys_in_organization_structure_validation, l3_k)
+        ] if !contains(local.ignore_keys_in_organization_structure_validation, l2_k)])
+      if !contains(local.ignore_keys_in_organization_structure_validation, l1_k)]),
+      # Level 4
+      flatten([for l1_k, l1_v in var.organization_structure :
+        flatten([for l2_k, l2_v in try(l1_v, {}) :
+          flatten([for l3_k, l3_v in try(l2_v, {}) : [
+            for l4_k in try(keys(l3_v), []) :
+            !strcontains(l4_k, ":::") || contains(local.ignore_keys_in_organization_structure_validation, l4_k)
+          ] if !contains(local.ignore_keys_in_organization_structure_validation, l3_k)])
+        if !contains(local.ignore_keys_in_organization_structure_validation, l2_k)])
+      if !contains(local.ignore_keys_in_organization_structure_validation, l1_k)]),
+      # Level 5
+      flatten([for l1_k, l1_v in var.organization_structure :
+        flatten([for l2_k, l2_v in try(l1_v, {}) :
+          flatten([for l3_k, l3_v in try(l2_v, {}) :
+            flatten([for l4_k, l4_v in try(l3_v, {}) : [
+              for l5_k in try(keys(l4_v), []) :
+              !strcontains(l5_k, ":::") || contains(local.ignore_keys_in_organization_structure_validation, l5_k)
+            ] if !contains(local.ignore_keys_in_organization_structure_validation, l4_k)])
+          if !contains(local.ignore_keys_in_organization_structure_validation, l3_k)])
+        if !contains(local.ignore_keys_in_organization_structure_validation, l2_k)])
+      if !contains(local.ignore_keys_in_organization_structure_validation, l1_k)])
+    ))
+    error_message = "OU names cannot contain \":::\" as this is used within the module to separate levels."
+  }
+  validation {
+    condition     = alltrue([for l1_k in keys(var.organization_structure) : l1_k != var.static_tags_key])
+    error_message = "Static tags cannot be added to the Organization Root through Terraform."
   }
 }
 
-variable "ou_tags_key" {
-  description = "A key that will be ignored within organization_structure, and will instead be used to define a map of tags for the OU."
+variable "static_tags_key" {
+  description = "A key that will be ignored within organization_structure, and will instead be used to define a map of tags on the OU."
   type        = string
-  default     = null
-
-  validation {
-    condition     = var.ou_tags_key != null ? length(var.organization_structure) > 0 : true
-    error_message = "ou_tags_key can only be set if organization_structure is provided."
-  }
+  default     = ""
 }

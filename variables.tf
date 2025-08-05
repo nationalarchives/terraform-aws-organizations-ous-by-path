@@ -1,3 +1,14 @@
+variable "cascading_tags_key" {
+  description = "A key that will be ignored within organization_structure, and will instead be used to define a map of tags for the OU. These tags will cascade to child OUs if the same key isn't defined on a nested OU."
+  type        = string
+  default     = ""
+
+  validation {
+    condition     = var.cascading_tags_key != "" ? length(var.organization_structure) > 0 : true
+    error_message = "cascading_tags_key can only be set if organization_structure is provided."
+  }
+}
+
 variable "include_child_accounts" {
   description = "Include direct child AWS accounts in the output, increases the number of API calls when enabled."
   type        = bool
@@ -31,20 +42,15 @@ variable "organization_structure" {
   description = "The structure of OUs to manage as a map of maps. If not provided, this module will function as a data source."
   type        = any
   default     = {}
-
-  validation {
-    condition     = !strcontains(jsonencode(var.organization_structure), var.name_path_delimiter)
-    error_message = "OU names cannot contain the name_path_delimiter."
-  }
 }
 
-variable "ou_tags_key" {
-  description = "A key that will be ignored within organization_structure, and will instead be used to define a map of tags for the OU."
+variable "static_tags_key" {
+  description = "A key that will be ignored within organization_structure, and will instead be used to define a map of tags on the OU."
   type        = string
-  default     = null
+  default     = ""
 
   validation {
-    condition     = var.ou_tags_key != null ? length(var.organization_structure) > 0 : true
-    error_message = "ou_tags_key can only be set if organization_structure is provided."
+    condition     = var.static_tags_key != "" ? length(var.organization_structure) > 0 : true
+    error_message = "static_tags_key can only be set if organization_structure is provided."
   }
 }
