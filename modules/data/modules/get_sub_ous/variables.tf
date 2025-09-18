@@ -3,6 +3,11 @@ variable "include_aws_accounts" {
   type        = bool
 }
 
+variable "include_ou_tags" {
+  description = "Include tags for each OU in the output, increases the number of API calls when enabled."
+  type        = bool
+}
+
 variable "name_path_delimiter" {
   description = "Delimiter used to join names in the name_path attribute of each OU."
   type        = string

@@ -8,6 +8,7 @@ module "data" {
 
   include_child_accounts      = var.include_child_accounts
   include_descendant_accounts = var.include_descendant_accounts
+  include_ou_tags             = var.include_ou_tags
   name_path_delimiter         = var.name_path_delimiter
 }
 
@@ -19,6 +20,8 @@ module "resource" {
   include_descendant_accounts = var.include_descendant_accounts
   name_path_delimiter         = var.name_path_delimiter
   organization_structure      = var.organization_structure
+  cascading_tags_key          = var.cascading_tags_key
+  static_tags_key             = var.static_tags_key
 }
 
 locals {
