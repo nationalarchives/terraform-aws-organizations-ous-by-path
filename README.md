@@ -93,7 +93,7 @@ data "aws_iam_policy_document" "bucket_policy" {
       "${aws_s3_bucket.bucket.arn}/*",
     ]
     condition {
-      test     = "ForAllValues:StringEquals"
+      test     = "ForAnyValue:StringEquals"
       variable = "aws:PrincipalOrgPaths"
       values   = [module.ous.by_name_path["Level 1 OU/Level 2 OU"].org_path]
     }
