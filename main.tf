@@ -22,5 +22,5 @@ module "resource" {
 }
 
 locals {
-  output_map = try(module.data[0].by_name_path, module.resource[0].by_name_path)
+  output_map = !local.is_resource ? module.data[0].by_name_path : module.resource[0].by_name_path
 }
