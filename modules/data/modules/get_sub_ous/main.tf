@@ -8,6 +8,11 @@ data "aws_organizations_organizational_units" "ous" {
   parent_id = each.key
 }
 
+data "aws_organizations_resource_tags" "ous" {
+  for_each    = toset(!var.include_ou_tags ? [] : flatten([for parent_ou in data.aws_organizations_organizational_units.ous : [for child in parent_ou.children : child.id]]))
+  resource_id = each.key
+}
+
 data "aws_organizations_organizational_unit_child_accounts" "child_accounts" {
   for_each  = toset(!var.include_aws_accounts ? [] : flatten([for parent_ou in data.aws_organizations_organizational_units.ous : [for child in parent_ou.children : child.id]]))
   parent_id = each.key
@@ -30,6 +35,7 @@ locals {
         name_path           = local.is_level1 ? ou.name : "${local.parent_level_ou_map[parent_id].name_path}${var.name_path_delimiter}${ou.name}"
         org_path            = "${local.parent_level_ou_map[parent_id].org_path}${ou.id}/"
         parent_id           = parent_id
+        tags                = try(data.aws_organizations_resource_tags.ous[ou.id].tags, {})
       }
     ]
   ])

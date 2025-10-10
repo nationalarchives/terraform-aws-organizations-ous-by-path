@@ -3,9 +3,10 @@ locals {
 }
 
 resource "aws_organizations_organizational_unit" "ous" {
-  for_each  = toset(var.ou_name_paths)
+  for_each  = var.ous
   name      = element(split(var.name_path_delimiter, each.key), -1)
   parent_id = local.is_level1 ? var.parent_level_ou_map["Root"].id : var.parent_level_ou_map[trimsuffix(each.key, "${var.name_path_delimiter}${element(split(var.name_path_delimiter, each.key), -1)}")].id
+  tags      = each.value.tags
 }
 
 locals {
@@ -23,6 +24,7 @@ locals {
     name_path           = name_path
     org_path            = local.is_level1 ? "${var.parent_level_ou_map["Root"].org_path}${ou.id}/" : join("", [var.parent_level_ou_map[trimsuffix(name_path, "${var.name_path_delimiter}${element(split(var.name_path_delimiter, name_path), -1)}")].org_path, ou.id, "/"])
     parent_id           = ou.parent_id
+    tags                = ou.tags_all
     }
   }
 }
