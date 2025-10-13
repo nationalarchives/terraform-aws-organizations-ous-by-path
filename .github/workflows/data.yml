@@ -1,4 +1,4 @@
-name: OU Data Lookup
+name: "Plan example: data"
 on:
   workflow_dispatch:
   push:
@@ -44,7 +44,7 @@ jobs:
       - name: Terraform validate
         working-directory: ./examples/data
         run: terraform validate
-        
+
   secret_scan:
     name: Secret scan
     runs-on: ubuntu-latest

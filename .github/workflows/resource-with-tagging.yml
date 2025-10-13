@@ -1,4 +1,4 @@
-name: "Plan example: resource"
+name: "Plan example: resource-with-tagging"
 on:
   workflow_dispatch:
   push:
@@ -38,11 +38,11 @@ jobs:
         run: terraform fmt -check -recursive
 
       - name: Terraform init
-        working-directory: ./examples/resource
+        working-directory: ./examples/resource-with-tagging
         run: terraform init -get -backend=false
 
       - name: Terraform validate
-        working-directory: ./examples/resource
+        working-directory: ./examples/resource-with-tagging
         run: terraform validate
 
   secret_scan:
@@ -74,7 +74,7 @@ jobs:
       - secret_scan
     defaults:
       run:
-        working-directory: ./examples/resource
+        working-directory: ./examples/resource-with-tagging
 
     permissions:
       id-token: write
