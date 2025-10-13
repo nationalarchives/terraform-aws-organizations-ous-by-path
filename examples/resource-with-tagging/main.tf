@@ -5,6 +5,8 @@ module "ous" {
 
   name_path_delimiter    = " / "
   organization_structure = local.org_structure
-  static_tags_key        = "@tags"
-  cascading_tags_key     = "Vtags"
+
+  # These can be customised if required
+  # static_tags_key    = "@tags"
+  #  cascading_tags_key = "Vtags"
 }

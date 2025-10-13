@@ -1,12 +1,7 @@
 variable "cascading_tags_key" {
   description = "A key that will be ignored within organization_structure, and will instead be used to define a map of tags for the OU. These tags will cascade to child OUs if the same key isn't defined on a nested OU."
   type        = string
-  default     = ""
-
-  validation {
-    condition     = var.cascading_tags_key != "" ? length(var.organization_structure) > 0 : true
-    error_message = "cascading_tags_key can only be set if organization_structure is provided."
-  }
+  default     = "Vtags"
 }
 
 variable "include_child_accounts" {
@@ -47,10 +42,5 @@ variable "organization_structure" {
 variable "static_tags_key" {
   description = "A key that will be ignored within organization_structure, and will instead be used to define a map of tags on the OU."
   type        = string
-  default     = ""
-
-  validation {
-    condition     = var.static_tags_key != "" ? length(var.organization_structure) > 0 : true
-    error_message = "static_tags_key can only be set if organization_structure is provided."
-  }
+  default     = "@tags"
 }
