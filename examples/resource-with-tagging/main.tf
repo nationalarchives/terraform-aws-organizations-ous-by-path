@@ -8,5 +8,5 @@ module "ous" {
 
   # These can be customised if required
   # static_tags_key    = "@tags"
-  #  cascading_tags_key = "Vtags"
+  # cascading_tags_key = "Vtags"
 }
