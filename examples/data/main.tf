@@ -4,4 +4,5 @@ module "ous" {
   # version = "1.0.0"
 
   name_path_delimiter = " / "
+  include_ou_tags     = true
 }

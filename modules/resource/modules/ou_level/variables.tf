@@ -8,9 +8,11 @@ variable "name_path_delimiter" {
   type        = string
 }
 
-variable "ou_name_paths" {
-  description = "A list of OU paths for the OUs to create at the current level."
-  type        = list(string)
+variable "ous" {
+  description = "A map ( name_path => {tags: {}} ) of the OUs to create at the current level."
+  type = map(object({
+    tags = optional(map(string))
+  }))
 }
 
 variable "parent_level_ou_map" {

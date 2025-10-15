@@ -1,6 +1,6 @@
 # AWS Organizations OU by Path
 
-Creates Organization Units within an AWS Organization. To be deployed to the management account within an existing AWS Organization.
+Creates Organization Units with tags within an AWS Organization. To be deployed to the management account within an existing AWS Organization.
 
 ## Local Development - Terraform
 

@@ -9,6 +9,7 @@ locals {
 module "l1" {
   source               = "./modules/get_sub_ous"
   include_aws_accounts = var.include_child_accounts
+  include_ou_tags      = var.include_ou_tags
   name_path_delimiter  = var.name_path_delimiter
   # Mock a "level0_ous" module output for the root.
   parent_level_ou_list = [{
@@ -21,6 +22,7 @@ module "l1" {
 module "l2" {
   source               = "./modules/get_sub_ous"
   include_aws_accounts = var.include_child_accounts
+  include_ou_tags      = var.include_ou_tags
   name_path_delimiter  = var.name_path_delimiter
   parent_level_ou_list = module.l1.list
 }
@@ -28,6 +30,7 @@ module "l2" {
 module "l3" {
   source               = "./modules/get_sub_ous"
   include_aws_accounts = var.include_child_accounts
+  include_ou_tags      = var.include_ou_tags
   name_path_delimiter  = var.name_path_delimiter
   parent_level_ou_list = module.l2.list
 }
@@ -35,6 +38,7 @@ module "l3" {
 module "l4" {
   source               = "./modules/get_sub_ous"
   include_aws_accounts = var.include_child_accounts
+  include_ou_tags      = var.include_ou_tags
   name_path_delimiter  = var.name_path_delimiter
   parent_level_ou_list = module.l3.list
 }
@@ -42,6 +46,7 @@ module "l4" {
 module "l5" {
   source               = "./modules/get_sub_ous"
   include_aws_accounts = var.include_child_accounts
+  include_ou_tags      = var.include_ou_tags
   name_path_delimiter  = var.name_path_delimiter
   parent_level_ou_list = module.l4.list
 }
