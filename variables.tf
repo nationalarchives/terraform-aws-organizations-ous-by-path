@@ -34,13 +34,13 @@ variable "name_path_delimiter" {
 }
 
 variable "organization_id" {
-  description = "The ID of the AWS Organization. If not provided, the module will attempt to discover it using a data source which could prevent Terraform from planning if the Organization is to be created as part of the same deployment. Has no affect when the module is used as a data source."
+  description = "The ID of the AWS Organization. If not provided, the module will attempt to discover it using a data source which could prevent Terraform from planning if the Organization is to be created as part of the same deployment. Has no effect when the module is used as a data source."
   type        = string
   default     = null
 }
 
 variable "organization_root_id" {
-  description = "The Root ID of the AWS Organization. If not provided, the module will attempt to discover it using a data source which could prevent Terraform from planning if the Organization is to be created as part of the same deployment. Has no affect when the module is used as a data source."
+  description = "The Root ID of the AWS Organization. If not provided, the module will attempt to discover it using a data source which could prevent Terraform from planning if the Organization is to be created as part of the same deployment. Has no effect when the module is used as a data source."
   type        = string
   default     = null
 }

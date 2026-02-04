@@ -26,7 +26,7 @@ locals {
           "RSA CA"   = {},
           "@tags" = {
             "Project"  = "Serverless CA" # Sets Project="Serverless CA" on this OU only
-            "CostCode" = "173"           # Overrides the 999 value from parent OU on this OU only (child OUs are unaffected)
+            "CostCode" = "173"           # Overrides the 999 value from parent OU on this OU only (child OUs are uneffected)
           }
         },
         "Cloud Apps" = {}
