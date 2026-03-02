@@ -1,11 +1,14 @@
-data "aws_organizations_organization" "org" {}
+data "aws_organizations_organization" "org" {
+  count = var.organization_id == null || var.organization_root_id == null ? 1 : 0
+}
 
 locals {
   # Hardcode a delimiter to use internally for the name path, this allows the module caller to change var.name_path_delimiter without destroying everything.
   internal_name_path_delimiter = ":::"
 
-  org_id          = data.aws_organizations_organization.org.id
-  root_id         = data.aws_organizations_organization.org.roots[0].id
+  org_id  = var.organization_id == null ? data.aws_organizations_organization.org[0].id : var.organization_id
+  root_id = var.organization_root_id == null ? data.aws_organizations_organization.org[0].roots[0].id : var.organization_root_id
+
   org_path_prefix = "${local.org_id}/${local.root_id}/"
 
   # Convert the nested map structure into a map of objects with paths and tags

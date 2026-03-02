@@ -19,6 +19,8 @@ module "resource" {
   include_child_accounts      = var.include_child_accounts
   include_descendant_accounts = var.include_descendant_accounts
   name_path_delimiter         = var.name_path_delimiter
+  organization_id             = var.organization_id
+  organization_root_id        = var.organization_root_id
   organization_structure      = var.organization_structure
   cascading_tags_key          = var.cascading_tags_key
   static_tags_key             = var.static_tags_key
