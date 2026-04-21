@@ -7,6 +7,7 @@ module "ous" {
 
   organization_structure = {
     "Backup" = {},
+    "Network" = {},
     "Security" = {
       "Forensics"        = {},
       "Logging"          = {},
