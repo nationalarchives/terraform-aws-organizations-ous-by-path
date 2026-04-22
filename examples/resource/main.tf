@@ -6,7 +6,7 @@ module "ous" {
   name_path_delimiter = " / "
 
   organization_structure = {
-    "Backup" = {},
+    "Backup"  = {},
     "Network" = {},
     "Security" = {
       "Forensics"        = {},
