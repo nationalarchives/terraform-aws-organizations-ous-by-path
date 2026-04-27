@@ -1,7 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "local>nationalarchives/renovate-config",
-    "local>nationalarchives/renovate-config:github-actions"
+    "github>nationalarchives/renovate-config",
+    "github>nationalarchives/renovate-config:github-actions"
   ]
 }
