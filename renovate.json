@@ -1,7 +1,14 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "github>nationalarchives/renovate-config",
-    "github>nationalarchives/renovate-config:github-actions"
+    "local>nationalarchives/renovate-config",
+    "local>nationalarchives/renovate-config:github-actions"
+  ],
+  "packageRules": [
+    {
+      "matchManagers": ["terraform"],
+      "matchPackageNames": ["hashicorp/aws"],
+      "enabled": false
+    }
   ]
 }
