@@ -160,7 +160,7 @@ locals {
   output_map = { for name_path, ou in local.all_ous_internal : replace(ou.name_path, local.internal_name_path_delimiter, var.name_path_delimiter) => merge(
     ou,
     { name_path = replace(ou.name_path, local.internal_name_path_delimiter, var.name_path_delimiter) },
-    !var.include_descendant_accounts ? {} : { descendant_accounts = flatten([for i in local.all_ous_internal : i.child_accounts if strcontains(i.org_path, ou.id)]) }
+    !var.include_descendant_accounts ? {} : { descendant_accounts = flatten([for i in local.all_ous_internal : i.child_accounts if strcontains(i.org_path, "/${ou.id}/")]) }
     )
   }
 }
