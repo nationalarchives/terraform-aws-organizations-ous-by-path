@@ -64,6 +64,6 @@ locals {
   )
 
   output_list = !var.include_descendant_accounts ? local.all_ous : [for ou in local.all_ous : merge(ou, {
-    descendant_accounts = flatten([for i in local.all_ous : i.child_accounts if strcontains(i.org_path, ou.id)])
+    descendant_accounts = flatten([for i in local.all_ous : i.child_accounts if strcontains(i.org_path, "/${ou.id}/")])
   })]
 }
