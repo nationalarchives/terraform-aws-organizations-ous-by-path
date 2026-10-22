@@ -110,6 +110,28 @@ resource "aws_s3_bucket_policy" "allow_access_from_another_account" {
 }
 ```
 
+### Renaming and moving OUs (resource mode)
+
+When the module is used as a **resource**, each OU is tracked by its full `name_path` (for example `Workloads/Application/Production`). This gives stable, readable addressing, but it has an important consequence:
+
+> **Renaming an OU, or moving it to a different parent or depth, changes its `name_path` and therefore causes Terraform to _destroy and recreate_ the OU.**
+
+Recreation has real consequences:
+
+- AWS will **not** delete an OU that still contains accounts or child OUs, so the apply will **fail** for any non-empty OU.
+- Even when recreation succeeds, the OU receives a **new id**. Anything that references the old id — Service Control Policy attachments, `aws:PrincipalOrgPaths` / `aws:ResourceOrgPaths` IAM conditions, etc. — must be updated.
+
+To rename or move an OU **without** destroying it, tell Terraform the resource has simply moved to a new address using a [`moved` block](https://developer.hashicorp.com/terraform/language/modules/develop/refactoring) (or `terraform state mv`). For example, renaming `Application` to `Apps` under `Workloads`:
+
+```hcl
+moved {
+  from = module.ous.module.resource[0].module.l2.aws_organizations_organizational_unit.ous["Workloads:::Application"]
+  to   = module.ous.module.resource[0].module.l2.aws_organizations_organizational_unit.ous["Workloads:::Apps"]
+}
+```
+
+Internally the module joins path segments with `:::`, so the `for_each` keys use that delimiter regardless of the `name_path_delimiter` you configure. Run `terraform plan` after adding the block to confirm the OU is being moved rather than replaced. Moving an OU to a **different depth** additionally changes the level sub-module (`l1`…`l5`), so adjust the `from`/`to` module paths accordingly.
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
